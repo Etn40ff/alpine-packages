@@ -1,20 +1,47 @@
-name: Build packages
-
-on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write
-
-jobs:
-  release:
+#name: Build packages
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+##permissions:
+##  contents: write
+##
+##jobs:
+##  release:
+##    runs-on: ubuntu-latest
+##    steps:
+##      - uses: actions/checkout@v3
+##      - uses: ivanvc/abuild-releaser-action@v1.1.0
+##        with:
+##          author: Salvatore Stella <salvatore.stella@univaq.it>
+##          rsa_public_key: ${{ secrets.RSA_PUBLIC_KEY }}
+##          rsa_private_key: ${{ secrets.RSA_PRIVATE_KEY }}
+#
+#jobs:
+#  release:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: KalleDK/actions-apkrepo@v0.0.30
+#        with:
+#          abuild_packager: "Salvatore Stella"
+#          abuild_key_name: "Foobar"
+#          abuild_key_priv: ${{ secrets.RSA_PRIVATE_KEY }}
+#          abuild_key_pub: ${{ secrets.RSA_PUBLIC_KEY }}
+#          abuild_repo_url: https://Etn40ff.github.io/apk
+#
+name: Test workflows
+on: workflow_dispatch
+jobs: 
+  test_workflows:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ivanvc/abuild-releaser-action@v1.1.0
+      - name: Setup Alpine Linux for aarch64
+        uses: jirutka/setup-alpine@v1
         with:
-          author: Salvatore Stella <salvatore.stella@univaq.it>
-          rsa_public_key: ${{ secrets.RSA_PUBLIC_KEY }}
-          rsa_private_key: ${{ secrets.RSA_PRIVATE_KEY }}
+          arch: aarch64
+    
+      - name: Run script inside Alpine chroot with aarch64 emulation
+        run: uname -m
+        shell: alpine.sh {0}
